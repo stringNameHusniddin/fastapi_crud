@@ -16,8 +16,11 @@ def getdb():
 
 
 @app.get("/blog")
-def list(db:Session=Depends(getdb)):
-    blogs = db.query(models.Blog).all()
+def list(limit:int | None=None, db:Session=Depends(getdb)):
+    if limit:
+        blogs = db.query(models.Blog).limit(limit=limit).all()
+    else:
+        blogs = db.query(models.Blog).all()
     return blogs
 
 @app.get("/blog/{id}")
